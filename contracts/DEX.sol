@@ -20,6 +20,9 @@ contract DEX {
     }
 
     function sell () external onlyOwner {
-        
+        uint allowance = associatedToken.allowance(msg.sender, address(this));
+        require(allowance > 0, "you must allow this contract access to at least one token");
+        bool sent = associatedToken.transferFrom(msg.sender, address(this), allowance);
+        require(sent, "failed to send");
     }
 }
